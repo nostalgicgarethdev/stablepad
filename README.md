@@ -120,16 +120,25 @@ No environment variables are required for the current build. Live market data is
 
 ## Security
 
-This repo is designed to run **without secrets**:
+This repo runs **without API keys or wallet secrets**. Audited clean — nothing sensitive is committed or linked.
 
-- No API keys, private keys, or wallet seeds in source
-- `.env` files are gitignored — never commit credentials
-- `.vercel/` deploy metadata is gitignored
-- `node_modules/` and `output/` are gitignored
+| Status | Item |
+|--------|------|
+| ✅ | No API keys, private keys, or seed phrases in source |
+| ✅ | No `.env` files on GitHub (gitignored) |
+| ✅ | No `.vercel/` link metadata on GitHub (gitignored) |
+| ✅ | No GitHub Actions secrets configured |
+| ✅ | Wallet connect uses Phantom only — keys never touch the app |
 
-Public addresses in `lib/config.js` (program IDs, stable mints, public RPC) are **on-chain identifiers**, not secrets.
+**Public by design** (not secrets): Solana program IDs, USDC/USD1 mint addresses, and the public mainnet RPC in `lib/config.js`.
 
-If you add env-based config later, use `.env.example` as a template and keep real values local only.
+**Before you push**, run the secret scanner:
+
+```bash
+npm run check:secrets
+```
+
+If you add env-based config later, copy `.env.example` → `.env` locally and never commit the real file.
 
 ---
 
