@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Stablepad — create and securely back your own stablecoin. 100% automated, 100% crowdsourced. True 1:1 backing via USDC/USD1. DLMM pools. Flywheel feeds $STABLEPAD.">
+  <title>Stablepad · Meme-Stable Launchpad</title>
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
+  <link rel="apple-touch-icon" href="assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="page">
+    <nav class="nav">
+      <a href="#" class="brand">
+        <img src="assets/logo.jpg" alt="Stablepad" class="brand-logo">
+        <div>
+          <div class="brand-title">Stablepad</div>
+          <div class="brand-sub">$STABLEPAD · meme-stables · DLMM</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="#launch">Launch</a>
+        <a href="#explore">Explore</a>
+        <a href="#flywheel">$STABLEPAD</a>
+        <a href="#how">How it works</a>
+        <button class="btn btn-outline btn-wallet" id="connect-wallet">Connect Wallet</button>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <div class="hero-badge">100% automated · 100% crowdsourced</div>
+        <h1>Create &amp; <span>securely back</span> your own stablecoin</h1>
+        <p class="hero-lead">Anyone can launch a meme-stable on Solana — fully backed 1:1 by proven assets. Zero intervention. Fully on-chain. Transparent.</p>
+
+        <ul class="hero-bullets">
+          <li>Democratizes stablecoin creation — meme-stables galore</li>
+          <li>True 1:1 backing via USDC &amp; USD1</li>
+          <li>DLMM pools — better trading than basic AMMs</li>
+        </ul>
+
+        <div class="hero-actions">
+          <a href="#launch" class="btn btn-primary">Launch a Meme-Stable</a>
+          <a href="#explore" class="btn btn-outline">Explore Stables</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="ratio-card">
+          <div class="ratio-big">1:1</div>
+          <div class="ratio-sub">Backed by proven stables</div>
+          <div class="ratio-pairs">
+            <span class="pair-pill usd1">USD1</span>
+            <span class="pair-pill usdc">USDC</span>
+          </div>
+          <div class="ratio-flow">
+            <div class="ratio-step">Launch</div>
+            <div class="ratio-arrow">→</div>
+            <div class="ratio-step">Curve</div>
+            <div class="ratio-arrow">→</div>
+            <div class="ratio-step highlight">DLMM</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="value-props">
+      <div class="value-card">
+        <div class="value-icon">◎</div>
+        <h3>Anyone → meme-stables</h3>
+        <p>Democratizes stablecoin creation. Launch your own backed stable in one flow — no gatekeepers.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">=</div>
+        <h3>True 1:1 backing</h3>
+        <p>Every meme-stable is backed by proven assets — USDC or USD1. Real collateral, real peg.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">⛓</div>
+        <h3>Zero intervention</h3>
+        <p>Fully on-chain and transparent. No manual ops, no admin keys — the system runs itself.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">◈</div>
+        <h3>DLMM pools</h3>
+        <p>Graduate into concentrated liquidity DLMM pools — deeper books, tighter spreads, better execution.</p>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-val" id="stat-launches">…</div>
+        <div class="stat-label">On Bonding Curve</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="stat-volume">…</div>
+        <div class="stat-label">Curve TVL (USD)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="stat-graduated">…</div>
+        <div class="stat-label">Graduated to DLMM</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">$STABLEPAD</div>
+        <div class="stat-label">Flywheel Token</div>
+      </div>
+    </div>
+
+    <section class="section" id="launch">
+      <div class="section-head">
+        <h2>Launch a Meme-Stable</h2>
+        <p>Pick your 1:1 backing asset and deploy — crowdsourced liquidity from day one</p>
+      </div>
+
+      <div class="launch-grid">
+        <div class="panel">
+          <h3>Stable Details</h3>
+          <div class="field">
+            <label>Name</label>
+            <input type="text" id="token-name" placeholder="Dollar Pepe">
+          </div>
+          <div class="field">
+            <label>Symbol</label>
+            <input type="text" id="token-symbol" placeholder="DPEPE" maxlength="10">
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea id="token-desc" placeholder="Your meme-stable, backed 1:1..."></textarea>
+          </div>
+          <div class="field">
+            <label>Image</label>
+            <div class="upload-zone" id="upload-zone">Upload stable icon</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>1:1 Backing Asset</h3>
+          <p class="panel-hint">Choose the proven stable that collateralizes your meme-stable</p>
+
+          <div class="pair-select">
+            <button type="button" class="pair-option usd1 active" data-pair="USD1">
+              <div class="pair-icon usd1">$1</div>
+              <div class="pair-name">USD1</div>
+              <div class="pair-desc">1:1 USD1 collateral</div>
+            </button>
+            <button type="button" class="pair-option usdc" data-pair="USDC">
+              <div class="pair-icon usdc">$</div>
+              <div class="pair-name">USDC</div>
+              <div class="pair-desc">1:1 USDC collateral</div>
+            </button>
+          </div>
+
+          <div class="info-box">
+            <div class="info-label">On graduation</div>
+            <div class="info-val">DLMM pool deployment</div>
+            <div class="info-hint">Liquidity migrates to concentrated DLMM — better depth than basic AMMs</div>
+          </div>
+
+          <button class="btn btn-primary" id="launch-btn" style="width:100%;margin-top:1.25rem;padding:0.9rem">
+            Launch on Stablepad
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="explore">
+      <div class="section-head">
+        <h2>Explore Meme-Stables</h2>
+        <p>Crowdsourced launches — trade the curve or DLMM pools</p>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="USD1">USD1 Backed</button>
+        <button class="filter-btn" data-filter="USDC">USDC Backed</button>
+        <button class="filter-btn" data-filter="graduated">DLMM Live</button>
+        <button class="filter-btn" data-filter="curve">On Curve</button>
+      </div>
+
+      <div class="token-grid" id="token-grid"></div>
+    </section>
+
+    <section class="section flywheel-section" id="flywheel">
+      <div class="flywheel-card">
+        <div class="flywheel-content">
+          <div class="flywheel-badge">The Flywheel</div>
+          <h2>Every trade feeds <span>$STABLEPAD</span></h2>
+          <p>Protocol fees from launches, curve trades, and DLMM volume flow directly into the $STABLEPAD flywheel — aligning the entire ecosystem around Stablepad.</p>
+          <ul class="flywheel-list">
+            <li>Launch fees → $STABLEPAD buyback</li>
+            <li>Curve volume → $STABLEPAD treasury</li>
+            <li>DLMM fees → $STABLEPAD accumulation</li>
+          </ul>
+        </div>
+        <div class="flywheel-visual">
+          <div class="flywheel-ring">
+            <div class="flywheel-center">$STABLEPAD</div>
+          </div>
+          <div class="flywheel-tags">
+            <span>Launches</span>
+            <span>Curve</span>
+            <span>DLMM</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="section-head">
+        <h2>How Stablepad Works</h2>
+        <p>Automated. Crowdsourced. On-chain.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step-card">
+          <div class="icon">1</div>
+          <h3>Launch with 1:1 backing</h3>
+          <p>Deploy your meme-stable backed by USDC or USD1. True 1:1 collateral — no synthetic pegs, no trust assumptions.</p>
+        </div>
+        <div class="step-card">
+          <div class="icon">2</div>
+          <h3>Crowdsource on the curve</h3>
+          <p>100% crowdsourced liquidity. Early traders bond against proven stables on a transparent bonding curve until graduation.</p>
+        </div>
+        <div class="step-card">
+          <div class="icon">3</div>
+          <h3>Graduate to DLMM</h3>
+          <p>When the curve completes, liquidity auto-deploys to a DLMM pool — concentrated liquidity for tighter spreads and deeper books.</p>
+          <span class="dlmm-badge">Meteora DLMM</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p><strong>Stablepad</strong> · Create &amp; securely back your own stablecoin</p>
+      <p style="margin-top:0.5rem">$STABLEPAD flywheel · USDC · USD1 · DLMM · <a href="https://github.com/staccDOTsol/pumprecovery" target="_blank" rel="noopener">pumprecovery</a></p>
+    </footer>
+  </div>
+
+  <div class="modal-overlay" id="trade-modal">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <h3 id="modal-token-name">Token</h3>
+          <span id="modal-pair" style="font-size:0.8rem;color:var(--muted)"></span>
+        </div>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+
+      <div class="trade-tabs">
+        <button class="trade-tab buy active" data-side="buy">Buy</button>
+        <button class="trade-tab sell" data-side="sell">Sell</button>
+      </div>
+
+      <div class="trade-input-wrap">
+        <input type="number" id="trade-amount" placeholder="0.00" min="0" step="0.01">
+        <div class="unit" id="trade-unit">USD1</div>
+      </div>
+
+      <button class="btn btn-primary" id="trade-btn" style="width:100%">Buy Stable</button>
+
+      <p id="modal-graduated-note" style="display:none;margin-top:1rem;font-size:0.8rem;color:var(--green);text-align:center">
+        ✓ Graduated — trade on DLMM
+      </p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

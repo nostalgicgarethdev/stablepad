@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Stablepad Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: Inter, system-ui, sans-serif;
+      background: #050810;
+      color: #f8fafc;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      padding: 72px 96px;
+      transition: opacity 0.45s ease;
+    }
+    .scene.active { opacity: 1; }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 55% at 50% -5%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(ellipse 50% 40% at 15% 85%, rgba(34,197,94,.16), transparent),
+        radial-gradient(ellipse 45% 35% at 88% 20%, rgba(96,165,250,.12), transparent),
+        linear-gradient(180deg, #050810 0%, #0a1224 50%, #050810 100%);
+      z-index: 0;
+    }
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(148,163,184,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 20%, transparent 85%);
+      z-index: 0;
+    }
+    .bg-pulse {
+      position: fixed;
+      width: 900px;
+      height: 900px;
+      left: 50%;
+      top: 42%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(34,197,94,.12), transparent 65%);
+      animation: bgPulse 4s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ── Scene 1 ── */
+    #s1 .content { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+    .logo-wrap {
+      position: relative;
+      width: 240px;
+      height: 240px;
+      margin-bottom: 48px;
+    }
+    .logo-ring {
+      position: absolute;
+      inset: -18px;
+      border-radius: 50%;
+      border: 2px solid rgba(96,165,250,.35);
+      box-shadow: 0 0 60px rgba(59,130,246,.25), inset 0 0 40px rgba(34,197,94,.08);
+      animation: ringPulse 2.4s ease-in-out infinite;
+    }
+    .logo {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      object-fit: cover;
+      filter: drop-shadow(0 0 48px rgba(96,165,250,.45));
+      animation: logoPop 0.8s cubic-bezier(.2,1.2,.4,1) both;
+    }
+
+    .hype-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(59,130,246,.18));
+      border: 1px solid rgba(96,165,250,.35);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #86efac;
+      margin-bottom: 28px;
+      box-shadow: 0 0 32px rgba(34,197,94,.15);
+      animation: slideUp 0.7s ease 0.1s both;
+    }
+    .hype-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 12px #22c55e;
+      animation: blink 1.2s ease infinite;
+    }
+
+    h1 {
+      font-size: 108px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      background: linear-gradient(135deg, #4ade80 0%, #22d3ee 45%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(34,197,94,.2));
+      animation: titlePop 0.8s cubic-bezier(.2,1.1,.4,1) 0.15s both;
+    }
+    .tag {
+      margin-top: 22px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #64748b;
+      animation: slideUp 0.7s ease 0.3s both;
+    }
+    .sub {
+      margin-top: 32px;
+      font-size: 34px;
+      font-weight: 600;
+      color: #e2e8f0;
+      max-width: 980px;
+      line-height: 1.35;
+      animation: slideUp 0.7s ease 0.4s both;
+    }
+    .sub em {
+      font-style: normal;
+      color: #4ade80;
+      font-weight: 800;
+    }
+
+    .pairs {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin-top: 44px;
+      animation: slideUp 0.7s ease 0.55s both;
+    }
+    .pair-pill {
+      padding: 16px 36px;
+      border-radius: 999px;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      border: 2px solid;
+    }
+    .pair-pill.usd1 {
+      color: #4ade80;
+      border-color: rgba(74,222,128,.5);
+      background: rgba(34,197,94,.14);
+      box-shadow: 0 0 28px rgba(34,197,94,.2);
+    }
+    .pair-pill.usdc {
+      color: #60a5fa;
+      border-color: rgba(96,165,250,.5);
+      background: rgba(59,130,246,.14);
+      box-shadow: 0 0 28px rgba(59,130,246,.2);
+    }
+
+    /* ── Scene headers ── */
+    .scene-head { margin-bottom: 52px; }
+    .scene-title {
+      font-size: 64px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      background: linear-gradient(135deg, #f8fafc, #4ade80, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 18px;
+    }
+    .scene-sub {
+      font-size: 26px;
+      font-weight: 600;
+      color: #94a3b8;
+      letter-spacing: 0.04em;
+    }
+    .scene-sub strong { color: #4ade80; font-weight: 800; }
+
+    /* ── Diagram ── */
+    #s2 .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .diagram {
+      position: relative;
+      width: 1480px;
+      height: 760px;
+    }
+    .node {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-radius: 20px;
+      background: rgba(10,18,36,.92);
+      border: 2px solid rgba(148,163,184,.14);
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      opacity: 0;
+      transform: translateY(28px) scale(0.92);
+    }
+    .node.show { animation: nodeIn 0.55s cubic-bezier(.2,1.2,.4,1) forwards; }
+    .node.glow-green { box-shadow: 0 0 40px rgba(34,197,94,.2), 0 12px 40px rgba(0,0,0,.35); border-color: rgba(74,222,128,.4); }
+    .node.glow-blue { box-shadow: 0 0 40px rgba(96,165,250,.2), 0 12px 40px rgba(0,0,0,.35); border-color: rgba(96,165,250,.4); }
+    .node.glow-purple { box-shadow: 0 0 40px rgba(167,139,250,.25), 0 12px 40px rgba(0,0,0,.35); border-color: rgba(167,139,250,.45); }
+    .node.glow-grad {
+      background: linear-gradient(135deg, rgba(34,197,94,.12), rgba(59,130,246,.12));
+      border-color: rgba(74,222,128,.45);
+      box-shadow: 0 0 48px rgba(34,197,94,.18), 0 12px 40px rgba(0,0,0,.35);
+    }
+    .node-icon { font-size: 32px; line-height: 1; }
+    .node-label { font-size: 24px; font-weight: 800; color: #f8fafc; letter-spacing: -0.01em; }
+    .node-sub { font-size: 15px; font-weight: 500; color: #94a3b8; }
+
+    .node.launch { width: 320px; height: 110px; left: 580px; top: 0; }
+    .node.backing { width: 240px; height: 96px; left: 200px; top: 168px; }
+    .node.backing.usdc { left: 1040px; }
+    .node.curve { width: 360px; height: 112px; left: 560px; top: 328px; }
+    .node.dlmm { width: 400px; height: 118px; left: 540px; top: 488px; }
+    .node.flywheel { width: 340px; height: 104px; left: 570px; top: 648px; }
+
+    .arrow { position: absolute; opacity: 0; }
+    .arrow.show { animation: fadeIn 0.4s ease forwards; }
+    .arrow path, .arrow line {
+      stroke: #475569;
+      stroke-width: 3;
+      fill: none;
+      stroke-dasharray: 10 7;
+      animation: dash 0.9s linear infinite;
+    }
+    .arrow.hot path, .arrow.hot line { stroke: #4ade80; stroke-width: 4; filter: drop-shadow(0 0 6px rgba(74,222,128,.6)); }
+
+    .particle {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .particle.stable { background: #4ade80; box-shadow: 0 0 16px rgba(74,222,128,.8); }
+    .particle.token { background: #60a5fa; box-shadow: 0 0 16px rgba(96,165,250,.8); }
+    .particle.fee { background: #c084fc; box-shadow: 0 0 16px rgba(192,132,252,.8); }
+
+    .caption {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      padding: 20px 36px;
+      border-radius: 16px;
+      background: rgba(5,8,16,.85);
+      border: 1px solid rgba(74,222,128,.2);
+      font-size: 28px;
+      font-weight: 700;
+      color: #e2e8f0;
+      opacity: 0;
+      box-shadow: 0 0 40px rgba(34,197,94,.08);
+    }
+    .caption.show { animation: captionPop 0.5s cubic-bezier(.2,1.1,.4,1) forwards; }
+    .caption span { color: #4ade80; }
+
+    /* ── Summary cards ── */
+    .summary-row {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      padding: 0 48px;
+    }
+    .summary-card {
+      width: 400px;
+      padding: 40px 34px;
+      border-radius: 22px;
+      background: rgba(10,18,36,.88);
+      border: 1px solid rgba(148,163,184,.12);
+      opacity: 0;
+      transform: translateY(32px) scale(0.95);
+      text-align: left;
+    }
+    .summary-card.show { animation: cardPop 0.65s cubic-bezier(.2,1.15,.4,1) forwards; }
+    .summary-card:nth-child(1) { border-color: rgba(74,222,128,.25); }
+    .summary-card:nth-child(2) { border-color: rgba(96,165,250,.25); }
+    .summary-card:nth-child(3) { border-color: rgba(192,132,252,.25); }
+    .summary-num {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      color: #4ade80;
+      margin-bottom: 16px;
+    }
+    .summary-card:nth-child(2) .summary-num { color: #60a5fa; }
+    .summary-card:nth-child(3) .summary-num { color: #c084fc; }
+    .summary-card h3 {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+      line-height: 1.15;
+    }
+    .summary-card p { font-size: 18px; color: #94a3b8; line-height: 1.55; font-weight: 500; }
+
+    /* ── CTA ── */
+    #s4 .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    #s4 .logo-wrap { width: 160px; height: 160px; margin-bottom: 36px; }
+    #s4 .logo { width: 160px; height: 160px; }
+    #s4 .logo-ring { inset: -12px; }
+
+    .ratio-big {
+      font-size: 148px;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      background: linear-gradient(135deg, #4ade80, #22d3ee, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 50px rgba(34,197,94,.25));
+      margin-bottom: 20px;
+      animation: ratioPulse 2s ease-in-out infinite;
+    }
+    .cta-title {
+      font-size: 72px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      background: linear-gradient(90deg, #f8fafc, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
+    }
+    .cta-sub {
+      font-size: 28px;
+      font-weight: 600;
+      color: #94a3b8;
+      max-width: 820px;
+      line-height: 1.4;
+      margin-bottom: 32px;
+    }
+    .cta-sub strong { color: #4ade80; font-weight: 800; }
+    .flywheel-tag {
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: #4ade80;
+      background: rgba(34,197,94,.1);
+      border: 1px solid rgba(74,222,128,.35);
+      margin-bottom: 36px;
+      box-shadow: 0 0 32px rgba(34,197,94,.12);
+    }
+    .url {
+      font-size: 36px;
+      font-weight: 800;
+      color: #60a5fa;
+      letter-spacing: 0.02em;
+      padding: 18px 40px;
+      border-radius: 14px;
+      background: rgba(59,130,246,.1);
+      border: 1px solid rgba(96,165,250,.3);
+      box-shadow: 0 0 40px rgba(59,130,246,.15);
+      animation: urlGlow 2.5s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes titlePop {
+      from { opacity: 0; transform: scale(0.88) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes logoPop {
+      from { opacity: 0; transform: scale(0.7); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes nodeIn {
+      from { opacity: 0; transform: translateY(28px) scale(0.92); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes cardPop {
+      from { opacity: 0; transform: translateY(32px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes captionPop {
+      from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes dash { to { stroke-dashoffset: -17; } }
+    @keyframes ringPulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.04); opacity: 1; }
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    @keyframes ratioPulse {
+      0%, 100% { filter: drop-shadow(0 0 50px rgba(34,197,94,.25)); }
+      50% { filter: drop-shadow(0 0 70px rgba(34,197,94,.45)); }
+    }
+    @keyframes urlGlow {
+      0%, 100% { box-shadow: 0 0 40px rgba(59,130,246,.15); }
+      50% { box-shadow: 0 0 60px rgba(59,130,246,.35); }
+    }
+    @keyframes moveDown {
+      0% { opacity: 0; transform: translate(0, 0); }
+      8% { opacity: 1; }
+      92% { opacity: 1; }
+      100% { opacity: 0; transform: translate(0, 72px); }
+    }
+    @keyframes moveDiagLeft {
+      0% { opacity: 0; transform: translate(0, 0); }
+      8% { opacity: 1; }
+      92% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-180px, 48px); }
+    }
+    @keyframes moveDiagRight {
+      0% { opacity: 0; transform: translate(0, 0); }
+      8% { opacity: 1; }
+      92% { opacity: 1; }
+      100% { opacity: 0; transform: translate(180px, 48px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-pulse"></div>
+
+  <section class="scene active" id="s1">
+    <div class="content">
+      <div class="logo-wrap">
+        <div class="logo-ring"></div>
+        <img src="assets/logo.jpg" alt="" class="logo">
+      </div>
+      <div class="hype-badge"><span class="dot"></span> Live on Solana</div>
+      <h1>STABLEPAD</h1>
+      <div class="tag">Meme-Stable Launchpad</div>
+      <div class="sub">Anyone can launch a stablecoin — backed <em>1:1</em> by USDC or USD1</div>
+      <div class="pairs">
+        <span class="pair-pill usd1">USD1</span>
+        <span class="pair-pill usdc">USDC</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="s2">
+    <div class="content">
+      <div class="scene-head">
+        <div class="scene-title">The Pipeline</div>
+        <div class="scene-sub"><strong>Launch</strong> → Curve → <strong>DLMM</strong> → $STABLEPAD</div>
+      </div>
+
+      <div class="diagram" id="diagram">
+        <div class="node launch glow-green" data-step="1">
+          <div class="node-icon">🚀</div>
+          <div class="node-label">Launch</div>
+          <div class="node-sub">Deploy your meme-stable</div>
+        </div>
+
+        <div class="arrow hot" data-step="2" style="left:480px;top:112px;width:280px;height:58px">
+          <svg width="280" height="58"><path d="M270 10 C200 10 140 30 30 50"/></svg>
+        </div>
+        <div class="arrow hot" data-step="2" style="left:920px;top:112px;width:280px;height:58px">
+          <svg width="280" height="58"><path d="M10 10 C80 10 140 30 250 50"/></svg>
+        </div>
+
+        <div class="node backing glow-green" data-step="2">
+          <div class="node-label">USD1</div>
+          <div class="node-sub">1:1 backing</div>
+        </div>
+        <div class="node backing usdc glow-blue" data-step="2">
+          <div class="node-label">USDC</div>
+          <div class="node-sub">1:1 backing</div>
+        </div>
+
+        <div class="arrow hot" data-step="3" style="left:738px;top:264px;width:4px;height:66px">
+          <svg width="4" height="66"><line x1="2" y1="0" x2="2" y2="66"/></svg>
+        </div>
+
+        <div class="node curve glow-blue" data-step="3">
+          <div class="node-icon">📈</div>
+          <div class="node-label">Bonding Curve</div>
+          <div class="node-sub">Crowdsourced liquidity</div>
+        </div>
+
+        <div class="arrow hot" data-step="4" style="left:738px;top:440px;width:4px;height:50px">
+          <svg width="4" height="50"><line x1="2" y1="0" x2="2" y2="50"/></svg>
+        </div>
+
+        <div class="node dlmm glow-purple" data-step="4">
+          <div class="node-icon">◈</div>
+          <div class="node-label">Meteora DLMM</div>
+          <div class="node-sub">Concentrated liquidity · tighter spreads</div>
+        </div>
+
+        <div class="arrow hot" data-step="5" style="left:738px;top:606px;width:4px;height:44px">
+          <svg width="4" height="44"><line x1="2" y1="0" x2="2" y2="44"/></svg>
+        </div>
+
+        <div class="node flywheel glow-grad" data-step="5">
+          <div class="node-label">$STABLEPAD</div>
+          <div class="node-sub">Every trade feeds the flywheel</div>
+        </div>
+
+        <div class="caption" id="caption">Anyone can <span>launch</span> a meme-stable</div>
+
+        <div class="particle stable" id="p1"></div>
+        <div class="particle stable" id="p2"></div>
+        <div class="particle token" id="p3"></div>
+        <div class="particle token" id="p4"></div>
+        <div class="particle fee" id="p5"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="s3">
+    <div class="content">
+      <div class="scene-head">
+        <div class="scene-title">Why Stablepad?</div>
+        <div class="scene-sub">100% automated · 100% on-chain · <strong>zero gatekeepers</strong></div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-card" data-step="1">
+          <div class="summary-num">01 — LAUNCH</div>
+          <h3>Real 1:1 backing</h3>
+          <p>Deploy your meme-stable collateralized by proven assets. No synthetic pegs. No trust assumptions.</p>
+        </div>
+        <div class="summary-card" data-step="2">
+          <div class="summary-num">02 — CURVE</div>
+          <h3>Crowdsource liquidity</h3>
+          <p>Early traders bond against USDC or USD1 on a transparent bonding curve until graduation.</p>
+        </div>
+        <div class="summary-card" data-step="3">
+          <div class="summary-num">03 — DLMM</div>
+          <h3>Graduate &amp; trade</h3>
+          <p>Liquidity auto-deploys to Meteora DLMM — deeper books, tighter spreads, better execution.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="s4">
+    <div class="content">
+      <div class="logo-wrap">
+        <div class="logo-ring"></div>
+        <img src="assets/logo.jpg" alt="" class="logo">
+      </div>
+      <div class="ratio-big">1:1</div>
+      <div class="cta-title">Launch. Back. Trade.</div>
+      <div class="cta-sub">Meme-stables galore — every trade feeds <strong>$STABLEPAD</strong></div>
+      <div class="flywheel-tag">$STABLEPAD FLYWHEEL</div>
+      <div class="url">stablepad.vercel.app</div>
+    </div>
+  </section>
+
+  <script>
+    const scenes = [...document.querySelectorAll('.scene')];
+    const sceneTimings = [3200, 11000, 5200, 4200];
+
+    const captions = [
+      'Anyone can <span>launch</span> a meme-stable',
+      'Backed <span>1:1</span> by USD1 or USDC',
+      '<span>Crowdsourced</span> liquidity on the curve',
+      'Graduate to <span>Meteora DLMM</span>',
+      'Fees flow into <span>$STABLEPAD</span>',
+    ];
+
+    function animateDiagram() {
+      const nodes = [...document.querySelectorAll('#diagram .node')];
+      const arrows = [...document.querySelectorAll('#diagram .arrow')];
+      const caption = document.getElementById('caption');
+      const steps = [
+        { t: 0, nodes: [0], arrows: [], cap: 0, particles: [] },
+        { t: 1100, nodes: [1, 2], arrows: [0, 1], cap: 1, particles: ['p1', 'p2'] },
+        { t: 2600, nodes: [3], arrows: [2], cap: 2, particles: ['p3'] },
+        { t: 4100, nodes: [4], arrows: [3], cap: 3, particles: ['p4'] },
+        { t: 5600, nodes: [5], arrows: [4], cap: 4, particles: ['p5'] },
+      ];
+
+      const particleAnims = {
+        p1: { left: '480px', top: '112px', anim: 'moveDiagLeft 1s ease forwards' },
+        p2: { left: '1180px', top: '112px', anim: 'moveDiagRight 1s ease forwards' },
+        p3: { left: '738px', top: '264px', anim: 'moveDown 0.9s ease forwards' },
+        p4: { left: '738px', top: '440px', anim: 'moveDown 0.9s ease forwards' },
+        p5: { left: '738px', top: '606px', anim: 'moveDown 0.9s ease forwards' },
+      };
+
+      nodes.forEach((n) => n.classList.remove('show'));
+      arrows.forEach((a) => a.classList.remove('show'));
+      if (caption) { caption.classList.remove('show'); caption.style.opacity = '0'; }
+
+      steps.forEach((step) => {
+        setTimeout(() => {
+          step.nodes.forEach((i) => nodes[i]?.classList.add('show'));
+          step.arrows.forEach((i) => arrows[i]?.classList.add('show'));
+          if (caption) {
+            caption.innerHTML = captions[step.cap];
+            caption.classList.remove('show');
+            void caption.offsetWidth;
+            caption.classList.add('show');
+          }
+          step.particles.forEach((id) => {
+            const el = document.getElementById(id);
+            const cfg = particleAnims[id];
+            if (!el || !cfg) return;
+            el.style.left = cfg.left;
+            el.style.top = cfg.top;
+            el.style.animation = 'none';
+            void el.offsetWidth;
+            el.style.animation = cfg.anim;
+          });
+        }, step.t);
+      });
+    }
+
+    function animateSummary() {
+      document.querySelectorAll('#s3 .summary-card').forEach((card) => card.classList.remove('show'));
+      document.querySelectorAll('#s3 .summary-card').forEach((card, idx) => {
+        setTimeout(() => card.classList.add('show'), idx * 350);
+      });
+    }
+
+    function replayIntro() {
+      const els = document.querySelectorAll('#s1 .logo, #s1 .hype-badge, #s1 h1, #s1 .tag, #s1 .sub, #s1 .pairs');
+      els.forEach((el) => {
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        const map = {
+          logo: 'logoPop 0.8s cubic-bezier(.2,1.2,.4,1) both',
+          'hype-badge': 'slideUp 0.7s ease 0.1s both',
+          H1: 'titlePop 0.8s cubic-bezier(.2,1.1,.4,1) 0.15s both',
+          tag: 'slideUp 0.7s ease 0.3s both',
+          sub: 'slideUp 0.7s ease 0.4s both',
+          pairs: 'slideUp 0.7s ease 0.55s both',
+        };
+        if (el.classList.contains('logo')) el.style.animation = map.logo;
+        else if (el.classList.contains('hype-badge')) el.style.animation = map['hype-badge'];
+        else if (el.tagName === 'H1') el.style.animation = map.H1;
+        else if (el.classList.contains('tag')) el.style.animation = map.tag;
+        else if (el.classList.contains('sub')) el.style.animation = map.sub;
+        else if (el.classList.contains('pairs')) el.style.animation = map.pairs;
+      });
+    }
+
+    let i = 0;
+    function next() {
+      scenes[i].classList.remove('active');
+      i = (i + 1) % scenes.length;
+      scenes[i].classList.add('active');
+      if (scenes[i].id === 's1') replayIntro();
+      if (scenes[i].id === 's2') animateDiagram();
+      if (scenes[i].id === 's3') animateSummary();
+      setTimeout(next, sceneTimings[i]);
+    }
+
+    setTimeout(next, sceneTimings[0]);
+  </script>
+</body>
+</html>

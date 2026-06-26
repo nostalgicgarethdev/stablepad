@@ -1,0 +1,15 @@
+{
+  "name": "stablepad",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev --listen 5180",
+    "start": "vercel dev --listen 5180",
+    "deploy": "vercel --prod",
+    "record": "node record-demo.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.52.0"
+  }
+}
