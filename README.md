@@ -10,13 +10,16 @@
 </p>
 
 <p align="center">
-  <a href="https://stablepad.vercel.app"><img src="https://img.shields.io/badge/demo-live-22c55e?style=for-the-badge" alt="Live demo"></a>
+  <a href="https://stablepad.vercel.app"><img src="https://img.shields.io/badge/website-live-22c55e?style=for-the-badge" alt="Live website"></a>
+  <a href="https://nostalgicgarethdev.github.io/stablepad/"><img src="https://img.shields.io/badge/github-pages-222?style=for-the-badge&logo=github" alt="GitHub Pages"></a>
   <a href="https://github.com/nostalgicgarethdev/stablepad"><img src="https://img.shields.io/badge/github-repo-181717?style=for-the-badge&logo=github" alt="GitHub"></a>
   <a href="https://vercel.com"><img src="https://img.shields.io/badge/deployed-vercel-000?style=for-the-badge&logo=vercel" alt="Vercel"></a>
 </p>
 
 <p align="center">
-  <a href="https://stablepad.vercel.app">stablepad.vercel.app</a>
+  <a href="https://stablepad.vercel.app"><strong>stablepad.vercel.app</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://nostalgicgarethdev.github.io/stablepad/">GitHub Pages</a>
 </p>
 
 ---

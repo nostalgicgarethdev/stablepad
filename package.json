@@ -1,6 +1,7 @@
 {
   "name": "stablepad",
   "version": "1.0.0",
+  "homepage": "https://stablepad.vercel.app",
   "type": "module",
   "private": true,
   "scripts": {
